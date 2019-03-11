@@ -1,0 +1,56 @@
+这篇文章给了一个非常详尽的3D point cloud processing 框架。
+
+需要着重研究的几个点
+
+1. ALS 和MLS的比较，优缺点
+
+1.1 ALS一般收集的从topview看到的场景的整体structure，MLS是从一侧观察scene。
+1.2 ALS搜集的数据的density比较均匀，MLS搜集的点云数据，离的近的密度大，离得远的密度小。
+1.3 一些高的建筑，MLS不能完全搜集到.
+
+2. MLS 和TLS的区别
+2.1 Terrestrial Laser Scanning (TLS)： 每个scan都是在静止状态下获得的，其实就是我们获得Ground truth的方式，stop-go-scan。
+2.2 MLS 是被安装在vehile上，一直在移动的过程中采集数据。
+正因为如此，TLS的精度比MLS精度高，这也是为什么把TLS的结果作为ground truth。
+
+3. 3D point cloud processing的几个通用的流程
+3.1 Feature extraction
+指检测点云的那些 “Low-level attributes”， 所谓“Low-level attributes”指的是没有语义信息的特征，比如说 planar，surface，edge。
+列举常用的feature extraction的方法
+Hough Transform, 
+Random Sample Consensus(RANSAC), 
+Principal Component Analysis (PCA), 
+Fast Point Feature Histograms (FPFH), 
+Region Growing，
+Connected Components, 
+Graph-Cut, 
+Supervoxelization.
+
+这里先不做深入了解，只是大概有个感官上的认识。
+
+3.2 Segmentation
+
+3.3 Object Recognition
+
+这里介绍了提取ground objects的三种常用的方法
+（1）rasterization
+（2）3D-point
+  之前在处理KITTI数据时mAndreas让我用的customer 去掉ground point就是用的3D point method。
+（3）scanline method
+3.4 Classification
+
+定义：Classification is the process to semantically label each point in the MLS data that can support
+further modeling and analysis of the scene.
+
+一般被分成三类：
+（1）point-wise classification
+  对每个点进行分类
+（2）segment-wise classification
+ (3) object-wise classification
+后两种方法的输入不是一个个的点云数据而是分割以后的一个个块。
+
+当前很多分类方法中都使用supervised machine learning和deep learning的框架。 这部分引用的大量文献要细细品味。
+
+4. Benchmark Datasets
+
+点云分类的几个Benchmark datasets，先记住，以后用的时候再说。
