@@ -1,0 +1,77 @@
+1. Why point cloud reduction?
+
+3D measurement systems produce large 3D point clouds. The basis of point cloud processing
+is the ability to process point cloud efficiently. Thus, data reduction becomes necessary for processing large point clouds.
+
+1.1 对registration，point reduction 也有好处
+
+Data reduction becomes necessary to efficiently perform operations, especially registration, on these point clouds.
+Reduced point clouds will notably increase the speed of the registration.
+比如说：ICP algorithm minimises the euclidian distance between the points in a scan
+pair. So The number of points in the point clouds has a direct impact on the time efficiency of the
+registration method.
+
+1.2 rely on special data structure
+Several methods rely on special data structures for point reduction. These
+methods uniformly subsample the point cloud to reduce the number of points.
+
+2. Point reduction 的种类
+
+2.1 rely on special data structures
+These methods uniformly subsample the point cloud to reduce the number of points. 
+
+2.1.1 Separate the space into voxel 
+
+这些方法的主要思路是：separate the space into voxels and sample points from each voxel。
+1)Octree Reduction  
+This is achieved by first separating the point cloud in many voxels and then by randomly selecting a number of points in each voxel. 在这个过程中，voxel size 和每个voxel中所包含的点数目代表着点的密度。
+
+这里说Octree reduction 具体实施起来细分为三种方法：
+
+A: The first method selects the center of the occupied voxel as the 
+representative point of the volume of the voxel.
+这里说的每个voxel只挑选出一个中心点来代表整个voxel，这样相对于原始的point cloud，数据的数量
+大大的减少了。
+
+B: The second method utilises the centroid of each voxel as the
+representative of the volumetric area
+
+这里不太明白方法A 和B的区别。应该是centroid(图心)和center(中心)是不一样的。
+
+C: The third and the more accurate method is to reduce the data by
+selecting a fixed number of points from each voxel.
+
+
+
+
+2.2 Point cloud reduction based on panorama images
+
+上面的uniformly subsample method 不适用于 panorama images。 
+因为They introduce holes in the generated images.
+我的理解是，如果对3D point cloud 进行下采样，点确实是减少了，但是下采样以后的3D point cloud 转化到
+panorama images后，就会出现洞，这就是因为点减少的缘故。
+This produces unusable panorama images for further point cloud processing. Particularly this increases the likelihood of failure of the feature-based registration method. 这里说的feature-based registration method 指的是使用2D 特征，也就是操作对象是panarama iamges。
+
+3. 程序实现
+
+3DTK中
+bin/scan_red 就是用来point cloud reduction的举例代码实现
+
+3.1 Octree reduction
+
+对于Octree reduction 主要通过设置parameter -r， -v，-O来reduction
+
+-r: choose reduction method. 其中RANGE 和INTERPOLATE 都和panorama images 有关。
+-v: set the size of voxel
+-O: 0 只在每个voxel中选择中心点作为代表
+    1 随机选择一个点
+    N if N=1,跟上面是一样的，即每个voxel随机选择一个点作为代表
+      if N>1,每个voxel，随机选择N个点作为这个voxel的代表
+    -1 把每个voxel中的点求平均值，然后这个平均值作为这个voxel的代表。这里所说的平均值
+     应该就是指的centroid.
+
+3.2 Panorama images reduction
+
+这种方法目前没有了解，以后如果用上了再说。
+
+

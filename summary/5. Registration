@@ -1,0 +1,107 @@
+1. why registration
+
+The generation of a complete 3D model from an environment without occlusion requires multiple scans from the environment. 也就是说，要想完全获得环境中的model，单个scan是不可能的，必须要从不同的角度获得多个scans才能完整的表达一个场景。这就是所谓的without occlusion。
+
+2. What is registration?
+
+The registration is the process of computing the relative transformation between
+overlapping scans to merge the data in one coordinate system.
+
+这个概念有三个要点
+1）计算relative transformation.
+2) 要计算的两个scans之间需要有overlapping(重叠).
+The overlapping areas from scans provide the necessary correspondences between captured point clouds for computing the relative transformation.
+3) goal是meige all scans into one coordinate system.
+The reason is 3D measurement systems capture point clouds in a local coordinate system defined by
+the scanner.
+
+也就是说每个scan都是被表征在当时的local scanner coordinate systems.
+
+3. Registration的几个不同表达
+
+1）registration
+2）merge
+3）scan matching
+
+4. 点云Registration的方法分类
+4.1 基于点的方法
+也就是说直接对一个个点云进行操作。
+4.1.1 ICP(Iternative Closest Point)
+
+Point-point ICP 
+Point-to-plane
+这个方法主要由三个步骤组成
+1）find point correspondence
+2）a good initial pose
+3）The solution of minimum function
+
+This method relies on a good initial pose (position and orientation) estimate
+for the fast convergence of the registration process. 如果initial pose 选择的不好，
+很容易落入局部最小值。A good start estimate is essential to improve the matching result. This
+ensures the convergence to a correct local minimum.
+
+如何获得good initial guess
+This initial estimate is commonly available with the help of additional methods and tools. 
+e.g GPS, IMU, Odometry and so on.
+
+4.2 基于feature的方法。
+If no pose estimation were acquired during the data collection the remaining option is the determination of the pose estimation directly from the data. 
+也就是说，如果没有initial guess，ICP这种方法就不能使用了。于是就在考虑能否直接对数据进行操作去registe 
+point cloud 而不需要initial guess。于是就有了基于feature的点云配准方法。
+
+Automatic algorithms favour the automatic extraction of the natural features from the scans. These
+features are then exploited to find the point correspondences between scans. Thus, registration
+without initial pose estimation is a highly active field of research.
+
+通过提取两个scans的feature，这些feature是用来发现两个scans的point correspondence的。 获得点对应以后，就可以计算两个scans之间的pose，这种基于feature的配准方法不需要initial pose。
+
+这种方法类意思相机中的基于特征的方法。
+
+
+
+These features provide the required correspondence between scans for the calculation of the pose
+estimates.
+
+4.2.1 Feature based on 3D structure
+ Planer patches
+
+4.2.2 2D feature detector and descriptor methods
+
+1）Scale invariant feature transform（SIFT）
+2）Speed-up robust features (SURF)
+3）Features from accelerated segment test (FAST)
+
+
+
+These methods rely on key point detectors for the detection of the correspondences.
+It relies on the generation of panorama images from the point clouds.
+也就是这种方法是对panorama images 进行处理。这样，different projection methods 就需要被了解了。
+
+4.3 NDT(Normal-distributions transform)
+
+是否需要initial guess， 时间长不看忘记了，等下次研究时再补上。
+
+不同于ICP 以点或平面为对象，也不同于feature-basd on method 以特征点为对象，这里把scan分为 一个个小的cell，然后以每个cell为基本处理对象，计算每个cell的PDF。PDF(概率分布函数) 被看作是局部表面（local surface）的约等，也就是说每个PDF描述了局部平面的特性，这些特性包括位置，orientation 和smoothness。
+当前NDT方法主要分为两种
+
+4.3.1 Point-to-Distribution
+
+假设这里有两组点云（这两个点云有overlap(重叠)），X为current scan， Y 为reference scan。
+point to distribution的情况是说 reference scan 为 distribution， current scan 为point。
+
+4.3.2 Distribution-to-Distribution
+和point-to-distribution的代表模型一样，不一样的地方在于，不仅reference scan 被分成一块块的PDF模块，current scan 也被分成一快快的PDF模型
+
+4.4 Globally Consistent Scan Matching
+
+4.1-4.3的实质上就是Lidar 里程计。也就是说只是计算相邻两个scans之间的pose matrix然后累计得到每个全局位姿。
+
+Lidar里程计的缺点：
+Registration of 3D point cloud pairs using the mentioned algorithms is prone to error. These
+errors are due to imprecise measurements and small registration errors.
+
+The small local errors for the registration of each scan pair add up and lead to a larger error for long sequences.
+
+Globally consistent scan mathing的作用
+Globally consistent scan matching algorithms aim to reduce these errors. The global matching
+algorithms take correspondences from all scans into account. 

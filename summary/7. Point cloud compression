@@ -1,0 +1,42 @@
+1. Why compression
+
+主要应用在data transmission 和 data archiving。
+
+1.1 data transmission
+
+Wireless networks are the common infrastructure used for transmitting the data from the scanning system to remote workstations. 
+
+数据量如果太大，在远程传送的过程中就存在诸多困难，所以为了实现快速高效传送，point cloud compression 就很有必要了。
+
+1.2 data archiving
+
+数据归档，指的是把暂时不用的老数据先存储起来，类似于档案馆的作用。 所以point cloud compression 也就很重要了。
+
+2. compression methods 
+
+2.1 based on tree structures
+
+k-d tree
+octree
+
+2.2 binary formats
+
+当初评估KITTI data set时候，它们存储的Lidar数据就是二进制的格式。
+
+2.2.1 LAS
+
+The American Society of Photogrammetry and Remote Sensing (ASPRS) created a simple
+binary exchange format called the LAS format.
+
+2.2.2 LAZ
+
+LAZ is a lossless compressor for LiDAR data stored in the LAS format.
+ 
+2.3 ASCII
+
+2.4 Panoroma Images
+
+
+
+2.5 
+

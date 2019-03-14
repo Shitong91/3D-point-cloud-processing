@@ -1,0 +1,19 @@
+Image projection is the process of mapping a curved surface on to a flat image. Representation
+of the spherical view of the measured environment on a flat image requires the mapping of the
+3D scene on a 2D medium.
+
+1.1 Equirectangular
+1.2 Cylindrical
+1.3 Mercator
+1.4 Rectilinear
+1.5 Pannini
+1.6 Stereographic
+1.7 Z-axis
+1.8 Albers Equal-Area Conic
+1.9 Equal-Area Cylindrical
+1.10 Lambert Azimuthal Equal-Area
+
+这里仅给一个清单，具体的实现没有看，如果以后用到再说。
+
+The panorama images are generated from the color, reflectance and range information provided
+by modern 3D laser measurement systems.

@@ -1,0 +1,19 @@
+1. Data acquision
+
+Captured scans contain the range information from the measured surfaces in the environment. Additionally, modern scanners are capable of capturing the reflectance and color values of the measured surfaces. The captured environment can be imagined as a sphere with the measurement system positioned at the center of the sphere. 
+
+Scanners 获取的数据有：range，reflectance and color values. 获取数据的过程，相当于传感器在一个球体的球心。获取的传感器的场景相当于球面。这在我用Riegl旋转360 degree获得single scan时候获取的结果是一样的。
+
+2. Data representation
+
+2.1 Cartesian coordinates
+
+Here, 3D laser measurement system is commonly stored as x, y and z. This represents the cartesian
+coordinates of the measured points in a coordinate frame originating at the scanner position.
+
+2.2 Spherical coordinate system
+An alternative method is to represent the points in the spherical coordinate system. The θ, ϕ, r
+represent the horizontal and vertical angles of measurement with the measured distance r. 
+
+
+

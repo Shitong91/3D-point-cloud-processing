@@ -1,0 +1,33 @@
+1. Ranger sensors
+
+Active range sensors provide direct measurements from the sensor to
+the objects in the environment.
+
+主要测量的是传感器离objects的距离。
+
+1.1 Active ranging sensors can be categorised into two groups.
+
+1.1.1 time of flight systems
+当前我使用的主要就是这种类型的。
+Time of flight systems that calculate the distance to objects based on the propagation speed of
+waves. 
+Laser rangefinders use light as the electromagnetic signals to calculate the distance to objects.
+They consists of a transmitter which emits the laser and a receiver capable of detecting the
+reflected light. These sensors often are referred to as Light Detection And Ranging (LiDAR)
+sensors. LiDAR is an optical remote sensing technology that measures the properties of scattered
+light to find range and other information of a distant target. 
+
+1.1.2 Second category is triangulation based active ranging systems.
+这里不了解。
+
+1.1.3 3D and 2D laser scanners
+
+2D LiDAR systems use a mechanical system with a mirror to sweep the light to cover
+a plane of the environment. 
+
+Additionally the 3D systems use an extra rotational mechanism to
+measure the environment in 3D. 就像Riegl，水平方向通过旋转来获得，竖直方向通过一个mirror来获得数据。
+
+2. Microsoft Kinect 
+
+3. stereo cameras

@@ -1,0 +1,26 @@
+1. Why data structure?
+
+3D measurement systems produce large 3D point clouds. The basis of point cloud processing
+is the ability to search for points in a short time. This tree structure is used to accelerate
+the search.
+也就是说，点云量太大，处理的时候需要的时间太长，如果我们能让点云以某种结构存储，这样在处理点云的时候就会加速处理速度。
+
+2. Common data structure
+
+1）k-d tree
+主要用来最快的搜索最近点，ICP中就使用了这样的方法。
+2）octree
+for storing and processing point clouds
+
+The tree divides the 3D environment into rectangular cuboids. These volumetric cuboids are represented as octree nodes. The root node of the tree represent the whole data. An octree node has up to eight children. Each child node corresponds to one octant of the cube.
+
+A node without a child implies that for the corresponding volume no further subdivision is necessary and the volume can be uniformly represented. 
+
+Point cloud points are stored in the octree nodes. All the nodes without
+points are considered as empty space.
+3）panorama images
+The use of panorama images opens the paradigm of 2D image processing methods to 3D point cloud processing. 
+The generation of panorama images from point clouds is based on the well-known cartography methods developed long ago for mapping the earth on a flat piece of paper. 
+上面那句话说了这种方法的来源。主要来源于把地球映射到平面的想法。
+为了用panorama images的数据结构，首先不得不把3D point cloud 转化到panorama images. 这样就引出了许多转化3D point cloud to panorama images的方法。
+

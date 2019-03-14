@@ -1,0 +1,12 @@
+1. Laser scanners 的作用
+Modern laser scanners are able to measure the surface of objects in the environment.
+
+They are capable of up to one million points per second
+measuring the reflectivity and the distance of a surface. With the help of photogrammetry they
+can also capture the color of the surface.
+
+Laser scanners 获得物体的表面信息，这些信息包括reflectivity（反射率）和scanners 距离 objects的distance. 如果配套上相机图像，我们就可以获得带颜色的3D point cloud。
+
+2. 3D point cloud的主要应用，也是我感兴趣的field
+The captured data is used for the generation of 2D and 3D maps of the environment. These maps are used in the robotics field for autonomous navigation and exploration. 
+
