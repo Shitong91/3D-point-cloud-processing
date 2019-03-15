@@ -1,0 +1,81 @@
+Genarally, there are three common form of lodar data acquisition.
+
+1. Mobile laser scanning(MLS)
+
+The MLS system is mounted to a vehicle and can capture detailed geomethic information of
+the roadway and surrounding are in a form of point clouds.
+
+提取几个特点：
+1.1 安装在vehicle
+1.2 移动的获取
+
+
+2. Airborne laser scanning (ALS)
+
+The majority of data processing algorithms, including feature extraction, segmentation, and classification have been developed for ALS data. 
+
+Both MLS and airborne laser scanning are also sometimes called kinematic laser scanning. 
+
+3. Terrestrial Laser Scanning(TLS)
+
+TLS acquires scans in a stationary manner. 也就是说TLS只在laser scanner 处于静止的状态下才进行扫描。
+一个例子是我们的Rieg的 stop-scan-and go mode,这种模式只在停止的时候才进行扫描。
+
+4. Comparision between MLS and ALS
+
+4.1 different view
+
+ALS is optimized to look down towards the ground capturing the top of objects whereas MLS looks
+at objects from the side with a view from the ground.
+
+4.2 different point density
+
+As a result of the altitude of flight and limited swath width, point density tends to be more uniform in ALS data compared with MLS data. In contrast, MLS systems collect data more densely close to the scanner trajectory with a straight view that degrades with distance from the scanner and increasing angle of incidence.
+
+ALS获得的数据更均匀，MLS 收集的数据，距离传感器近的地方，点密度比较高，距离远的地方，点云较稀疏。
+
+4.3 tall buiding
+
+MLS can capture surfaces underneath bridges as well as inside tunnels, but can be quite
+limited in capturing the top of objects, particularly for tall structures.
+
+MLS可以进隧道，桥下但是ALS不行
+MLS不能获取比较高的建筑的数据。
+
+4.4 range
+
+MLS is generally limited to collect data within a short range (typically 100 m) from navigable roadways, whereas ALS has more flexibility of where data can be collected.
+
+This requires that the laser scanners have a high range of several hundreds of meters for airborne laser scanning, whereas a maximum range of less than 100 meters is often enough for MLS. 
+MLS量程小，ALS量程大。
+
+4.4 Measument precision
+
+measurement precision in airborne laser scanners is in the order of cm instead of mm as it is often the case in MLS. 
+
+也就是说 ALS的精度一般是cm while MLS的精度是mm
+
+4.5 ALS 获取3D数据的方式
+In airborne laser scanning a 2D laser scanner is mounted on the underside of an airplane. During flight the downward looking 2D laser 
+scanner is moved orthogonally to its measuring plane thus creating a 3D point cloud. 
+只需要一个安装在飞机下面朝向下扫描的2D laser scanner 就可以得到3D point cloud。 具体个人还是有点不了解。暂且存疑。
+
+5. Comparision between MLS and TLS
+
+5.1 TLS Rigid bodies
+TLS在静态下获取scans。 也就是说每个scan都是在静止的状态下获得的。这样每个scan在空间中只有
+rotation 和 translation 运动，而不会产生 stretch, bent, deformation 运动。 所以scans are
+acted as rigid bodies. 那些针对rigid motion的数学算法比如说ICP就可以被完美的运用在scans之间
+transformation matrix的获取了。
+
+5.2 MLS-Non rigid
+
+a 3D laser scanner is mounted on a vehicle and is used in continuous mode, i.e., the sensor acquires multiple complete 3D scans without
+stopping in-between.
+MLS是在移动的过程中获取scan的，而即使同一个scan也是通过垂直和水平的扫描来获取的。也就是说同一个scan里包括的点也是在移动过程中获得的，这样scan之间的运动就不能被视为是刚性的运动，所以有关于刚体模型的数学方法不能直接被运用。
+
+Continious time slam 方法正是解决这个问题的，但是个人对这种方法和原来的6DSLAM方法没看出什么区别，从算法上来说用的是一样的数学模型，改得地方可能
+就是时间离散方面的问题，以后再仔细研究remote sensor 2013那篇文章。
+
+
+

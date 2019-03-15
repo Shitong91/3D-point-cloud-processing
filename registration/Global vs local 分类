@@ -1,0 +1,47 @@
+Rigid body registration algorithms 一般可以分成两个大类
+
+一，Global methods
+
+on the other hand, are usually based on local geometrical features that can be uniquely matched, without any assumptions on the initial state.
+
+也就是说这种global的方法不需要事先估计initial state
+
+R. B. Rusu, N. Blodow, and M. Beetz, “Fast Point Feature Histograms
+(FPFH) for 3D registration,”
+
+这一篇文章是代表性的方法。
+
+二，Local methods
+
+Local methods rely on the assumption that a sufficiently good initial guess for the
+relative position and orientation between the two point sets is available. Global methods.
+
+也就是局部方法最显著的特点就是需要假设一个充分精确的初始位姿。
+
+代表性的方法主要有：
+
+1. ICP
+
+需要注意的几点
+A: weight
+
+因为即使通过最近距离匹配的点对应，也有可能不是代表的空间中的同一点，解决方法是通过对不同的点对赋予不同的权重
+
+B:reject outlier
+
+可以通过设置点对点的距离，来剔除一些outlier point pairs
+
+2.1.1 point-to-point
+即当前SLAM6D的方法.
+
+2.1.2 point-to plane
+
+暂时还没有接触过
+
+2. NDT
+
+2.2.1 Point-Distribution
+
+2.2.2 Distribution-to-Distribution
+
+
