@@ -1,0 +1,40 @@
+这篇文章的主要内容
+
+1. 文章的思路是用semantic information 来辅助registration
+
+When semantic information is available for the points, it can be
+used as a prior in the search for correspondences to improve
+registration.
+
+这篇文章的大致思路和3D Mapping with Semantic Knowledge_2005是相同的，即把整个点云分成多个块，对每个块进行操作。不同的地方有两点
+
+1.1 Segment method
+
+*_2005 通过一个gradient 判断来把点云分成三部分;
+
+本文通过feature 即 edge 和 plane 来把点云分成多个部分，理论基础是
+a smoothness measure was used to label the points, The assumption is that points of the same region will have approximately the same smoothness value across scans. 
+
+1.2 求解relative pose的方法
+
+*_2005 通过ICP
+
+本文通过NDT模型，
+1.2.1 首先通过1.1中所说的smoothness，对每个点云进行分类，这样整个scan就被分成多个块。
+
+1.2.2 对每个点云块创立NDT
+
+1.2.3 by finding correspondences only among NDTs of the same type。
+
+也就是下面求relative pose时只对输入相同形状块的NDT进行操作，这样就减少了很大的计算开销。
+
+
+2. 存在不理解的地方
+
+2.1 具体的分类方法这里还是不太懂
+
+2.2 好像是每个分类块要建立两个NDT，分别代表edge 和站plane
+这里不态明白。
+
+
+

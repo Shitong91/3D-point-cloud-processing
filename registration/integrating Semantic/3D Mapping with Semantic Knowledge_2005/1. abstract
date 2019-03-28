@@ -1,0 +1,37 @@
+这篇文章的主要内容
+
+1. 文章的思路是用semantic information 来辅助registration
+
+When semantic information is available for the points, it can be
+used as a prior in the search for correspondences to improve
+registration.
+
+通过把环境预分解为floor， object and ceil。 这样我们得到了三个semantic segmentations。
+对每个segmentation创建k-d tree，在搜索点对应时，相邻scan之间只对属于同一个semantic segmentation
+的点进行点对应寻找。
+
+这样就大大的缩小的点对应搜索的时间，众所周知，ICP算法中，点对应搜索的占用的时间最多。
+
+2. 具体算法
+
+2.1 把环境分为三部分
+
+floor, object(也就是介于地板和天花板之间的部分)，ceil(天花板)
+
+2.1.1 分类判别标准
+
+对每个scan进行处理，每个scan之间的点求角度，如果角度在某个范围内，就被认为是三类中的一个。
+
+文章称计算的角度是梯度，开始是直接计算的同一个scan相邻的点，但是发现由于噪声的影响，有些噪声点会跳跃，这样就容易出错，所以就隔几个点计算一下，具体隔离的数目k通过分辨率计算。 这个方法直观来了解类似于数据点简单的滤波
+
+2.1.2 进一步的分割
+
+为了进一步的提高分类的精度，在运用2.1.1中方法之前先进行一下分割，这样2.1.1的分类操作尽在同一个分割块中计算。
+
+3. 通过2, 环境被分为三个部分，然后在求解ICP的point correspondence时，像传统的一样，用kd tree来解决。 但是这里对三个semantic segmentation 分别建立
+一个kd 树结构，三个kd 树同时运行，也就是说求解点对应只在同一个semantic segmentation 下进行。 从语义上来理解，这相当于current scan 上输入floor的点，在寻找点对应时，只寻找previous scan中输入floor别的点，别的点不搜索。
+
+
+
+
+

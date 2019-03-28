@@ -1,0 +1,41 @@
+这篇文章的主要内容
+
+1. 文章的思路是用semantic information 来辅助registration
+
+When semantic information is available for the points, it can be
+used as a prior in the search for correspondences to improve
+registration.
+
+Semantic-assisted Normal Distributions Transform (SE-NDT) is a new registration algorithm that reduces the complexity of the problem by using the semantic information to partition the point cloud into a set of normal distributions, which are then registered separately
+
+这篇文章的大致思路和3D Mapping with Semantic Knowledge_2005是相同的，即把整个点云分成多个块，对每个块进行操作。这篇文章也是对Intergrating Semantic based on features_2017 的拓展。和其它两篇文章不同的地方在于对点云的分类的方法。
+
+本文的分类方法使用了深度学习的方法来训练一个classfier。 通过这里分类器把点云分为多个块，然后再对各个块进行NDT操作。
+
+PointNet, a deep neural network
+for segmentation and classification of point clouds
+
+
+2. 可以借鉴的地方
+
+2.1 Common application of scan registration
+
+1) construction of a 3D model of an object
+
+2) a map of an environment
+
+3) recovery of the pose transform of the sensor for self-localization.
+
+2.2 Popular techniques for scan matching
+
+1) GICP
+
+2) NDT
+
+这些方法的缺点：their performance degrades in open environments with limited geometric structure.
+
+所谓的limited geomethic structure 指的是那些结构比较单一的场景，比如说高速公路。
+
+
+
+
