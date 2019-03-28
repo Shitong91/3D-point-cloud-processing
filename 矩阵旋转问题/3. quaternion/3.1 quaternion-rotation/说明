@@ -1,0 +1,19 @@
+1. Right-handed coordinate system
+
+和formula.png的方法一样
+
+2. 3DTK
+
+因为涉及一个转置，故公式有所变化
+
+q=q0+q1i+q2j+q3k
+
+
+R=( 1-2(q^2+q3^3)  2(q1q2+q0q3)  2(q1q3-q0q2)
+
+    2(q1q2-q0q3)  1-2(q1^2+q3^3) 2(q2q3+q0q1)
+
+    2(q1q3+q0q2)  2(q2q3-q0q1)  1-2(q1^2+q2^2)
+
+)
+

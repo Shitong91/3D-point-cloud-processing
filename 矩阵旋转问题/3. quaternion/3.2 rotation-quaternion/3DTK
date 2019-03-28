@@ -1,0 +1,58 @@
+/**
+ * Transforms a 4x4 Transformation Matrix into a quaternion
+ *
+ * @param mat     matrix to be converted
+ * @param quat    resulting quaternion
+ * @param t       resulting translation
+ */
+static inline void Matrix4ToQuat(const double *mat,
+                                 double *quat,
+                                 double *t = 0)
+{
+  
+  double T, S, X, Y, Z, W;
+  T = 1 + mat[0] + mat[5] + mat[10];
+  if ( T > 0.00000001 ) { // to avoid large distortions!
+    S = sqrt(T) * 2;
+    X = ( mat[9] - mat[6] ) / S;
+    Y = ( mat[2] - mat[8] ) / S;
+    Z = ( mat[4] - mat[1] ) / S;
+    W = 0.25 * S;
+  } else if ( mat[0] > mat[5] && mat[0] > mat[10] )  { // Column 0: 
+    S  = sqrt( 1.0 + mat[0] - mat[5] - mat[10] ) * 2;
+    X = 0.25 * S;
+    Y = (mat[4] + mat[1] ) / S;
+    Z = (mat[2] + mat[8] ) / S;
+    W = (mat[9] - mat[6] ) / S;
+  } else if ( mat[5] > mat[10] ) {                    // Column 1: 
+    S  = sqrt( 1.0 + mat[5] - mat[0] - mat[10] ) * 2;
+    X = (mat[4] + mat[1] ) / S;
+    Y = 0.25 * S;
+    Z = (mat[9] + mat[6] ) / S;
+    W = (mat[2] - mat[8] ) / S;
+  } else {                                            // Column 2:
+    S  = sqrt( 1.0 + mat[10] - mat[0] - mat[5] ) * 2;
+    X = (mat[2] + mat[8] ) / S;
+    Y = (mat[9] + mat[6] ) / S;
+    Z = 0.25 * S;
+    W = (mat[4] - mat[1] ) / S;
+  }
+  quat[0] = W;
+  quat[1] = -X;
+  quat[2] = -Y;
+  quat[3] = -Z;
+  
+  Normalize4(quat);
+  if (t != 0) {
+    t[0] = mat[12];
+    t[1] = mat[13];
+    t[2] = mat[14];
+  }
+}
+
+因为是3DTK，故这里的结果有些不一样。
+和右手坐标系不同的地方在于，在最后的结果上对 X,Y,Z分别取返得到。 但是这样也是有问题的。 如果得到的结果是是在if ( T > 0.00000001 )条件下，则 取返正好。
+
+如果前面转化时，满足的条件是其他的，则这么取反是有问题的，不过测试表明，很少有不满足第一种条件的矩阵，所以暂时没有出现问题，但是以后要注意了。
+
+
