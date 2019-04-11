@@ -1,0 +1,13 @@
+1. Rgression
+
+
+Training Set --Learning Algorithm--h
+
+这里的h被成为hypothesis，即假设的模型。
+
+在linear regression， 我们实际上要解决的就是个最小化问题，即使得假设的参数模型得出的预测数值和traning data中的答案差距最小。这样的一组模型参数就是我们最终学习的模型
+
+1.1  Linear regression with one variable
+也叫 Univariate linear regression 单变量线性回归
+
+

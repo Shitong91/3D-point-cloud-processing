@@ -1,0 +1,5 @@
+Unsupervised Learning
+
+被给的数据都是一样的，看不出有什么区别，没有标签。 也就是是，给你一堆数据，你能找到某种结构吗？
+
+Unsupervised learning 应该就是cluster（聚类）

@@ -1,0 +1,21 @@
+1. Supervised learning 
+
+概括来说就是，训练的数据中有答案（lable）。
+
+一本分为两种问题
+1.1 regression（回归）
+It mean we are trying to predict a continuous value output
+
+例子1：深圳人口预测，给出前十年的人口。预测未来五年的人口
+
+其中数据的属性是年份，训练数据的lable是前十年深圳人口的数量，这个数量
+是lable也就是答案。
+
+例子2: 给出一堆房子面积以及对应价格的数据，然后预测某个房屋面积下的房子价格。 这里房屋面积是数据attribute，对应的价格是lable。
+
+1.2 classcification
+
+是一个离散的预测问题。
+
+例子： 有一堆肿瘤大小和是否患癌症的数据。预测某个肿瘤大小是否有癌症。
+这里肿瘤大小是attribute，对应的是否有癌症是对应的lable。 这是一个分类问题
