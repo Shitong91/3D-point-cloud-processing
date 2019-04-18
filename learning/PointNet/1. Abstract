@@ -1,0 +1,27 @@
+1. 要解决的终极问题
+
+Point cloud classification and segmentation
+
+2. input and output
+
+input: original 3D point cloud
+也就是说直接对点操作，不需要转化
+output: labeled points or labeled segments
+
+Our PointNet is a unified architecture that directly
+takes point clouds as input and outputs either class labels
+for the entire input or per point segment/part labels for
+each point of the input.
+
+输出结果分为两种，对应两种应用场景
+
+2.1 For the object classification task.
+
+The input point cloud is either directly sampled from a shape or pre-segmented from a scene point cloud. Our proposed deep network outputs
+k scores for all the k candidate classes. 
+
+
+
+2.2 For semantic segmentation. 
+
+The input can be a single object for part region segmentation, or a sub-volume from a 3D scene for object region segmentation. Our model will output n × m scores for each of the n points and each of the m semantic subcategories. 即逐点的lable

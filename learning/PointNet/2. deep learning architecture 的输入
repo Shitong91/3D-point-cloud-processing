@@ -1,0 +1,17 @@
+前提：deep learning architecture 需要输入的数据是结构性的，
+比如说图像，每张图片上的每个像素都有固定的位置，也就是说这个图像可以用一个固定顺序的矩阵表示
+
+1. 3D point cloud 在deep learning architecture中的困难性
+
+3D point cloud data 无序性
+
+2. 当前主要的解决问题1的方法
+在feed 3D point cloud to deep net architecture 之前，先对original 3D point cloud 进行预处理
+2.1 transform 3D point cloud to regular 3D voxel grids 
+2.2 convert 3D point cloud into images
+
+缺点是计算量太大
+
+3. 直接对点进行操作
+
+PointNet 即本文的内容

@@ -1,0 +1,38 @@
+这里主要从两个层面进行总结
+
+1. data acquisition
+
+也就是直接读取的数据格式
+1.1 Cartesian coordinates
+
+Here, 3D laser measurement system is commonly stored as x, y and z. This represents the cartesian coordinates of the measured points in a coordinate frame originating at the scanner position.
+
+1.2 Spherical coordinate system
+An alternative method is to represent the points in the spherical coordinate system. The θ, ϕ, r represent the horizontal and vertical angles of measurement with the measured distance r. 
+
+2. application
+
+也就是从应用层面上，e.g for classifiaction,registration
+
+2.1 directively operating on 3D point cloud
+
+ICP
+
+2.2 Features
+
+local features and global features
+
+2.3 NDT
+
+2.4 Image
+
+也就是把3D point cloud 转化为2D oimage 然后利用图像处理的方法
+
+2.5 Voxelized grids
+
+CNN
+缺点
+volumetric representation is constrained by its resolution due to data sparsity and computation cost of 3D convolution.
+
+所谓的data sparsity 离Laser scanner近的地方数据密度大，远的地方稀疏
+

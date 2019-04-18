@@ -1,0 +1,6 @@
+利用PointNet来注册点云
+
+1. 改进LK algorithm 让他适用于PointNet
+1.1 为什么要改进？
+因为LK 需要计算gradient，PointNet不能计算这个
+2. 把PointNe 和 LK 结合在 recurrent deep neural network(递归深度网络)
