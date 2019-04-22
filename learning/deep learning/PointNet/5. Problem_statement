@@ -1,0 +1,67 @@
+1. 输入point cloud的特性
+
+1.1 Unordered
+
+前面已经说过很多，这里不再赘述
+
+1.2 点与邻域的关系
+
+每个点都不是孤立的一点，每个点都有一个邻域用来表示这个点的local structures.
+
+1.3 旋转不变性
+
+也就是说这个point set经过一定的旋转和平移不发生变化。
+
+2. PointNet的主要三个部分
+
+2.1 Symmetry Function for Unordered Input
+文中提出了三种解决点云输入无序性的问题
+
+2.1.1 sort input into a canonical order
+也就是说把输入点排列成一种固定的顺序
+
+2.1.2 treat the input as a sequence to train an RNN
+
+2.1.3 use a simple symmetric function
+
+本文中使用的方法
+
+The symmetric function takes n vectors as input and output a new vector that is invariant to the input order.
+
+具体的步骤：
+
+step1: 输入点先经过多个MLP输出n*1024的特征向量，其中n是数据集的数目，比如说这个点云有n个3d坐标。
+step2: 把step1的输出(nx1024)特征vector 输入到这个symmetric function 也就是max pool，这个函数其实就是对n*1024的特征向量每一列都取最大值，这样nX1024的特征向量经过max pool以后变为1X1024的行向量。
+
+参照截图 如何解决无序性.png
+
+2.2 combination local feature with global features
+
+这一部分是专为语义分割服务的。
+
+2.2.1 segmentaion
+
+把2.1.3 step2中得到的1X1024 global feature 加到nX64 local featue上
+也就是对于nX64的每一行，都加上计算出来的1X1024这个global feature，
+这样原来的nX64就变成了nX1088向量。这个nX1088特征向量是global and local 向量的融合。
+把nX1088的向量输入到连续两个mlp后，即可进行segmentation工作，输出的是nxm的分数，每一行有m个分数，分数最高的就把这个点归于最高分所代表的类，这样就完成了逐点的语义标签。
+具体参见segmentaton.png
+
+2.2.2  Classification
+
+通过把原始point set 输入 如何解决无序性.png图所示的框架以后，下面就是具体的解决两个问题了，本节主要针对classification问题
+2.1.3中 step2得出的1X1024的特征向量被称为是global feature，把这个global feature 输入到一个mlp框架下，即可完成classification工作
+也就是针对于classification，只需要使用1X1024这个global featue即可
+参见classification.png
+
+2.3 Joint Alignment Network
+
+这一部分主要是为了让输入点云对旋转不变性。参照T-Net.png
+
+
+总结：
+
+mlp是通过共享权重的卷积实现的，第一层卷积核大小是1x3（因为每个点的维度是xyz），之后的每一层卷积核大小都是1x1。即特征提取层只是把每个点连接起来而已。经过两个空间变换网络和两个mlp之后，对每一个点提取1024维特征，经过maxpool变成1x1024的全局特征。再经过一个mlp（代码中运用全连接）得到k个score。分类网络最后接的loss是softmax。
+--------------------- 
+
+
