@@ -1,0 +1,23 @@
+
+利用什么方法
+
+1. Our approach leverages self-supervision to define a relevant loss function to learn rich per-point features. 
+
+
+3D point cloud处理的缺点
+
+1. The use of point-clouds, however, is technically challenging for several reasons.
+
+
+总结不同的方法的共性
+
+All the above suggest different methods of.....
+
+实验结果
+
+Experiments show that our network called PointNet++ is able to learn deep point set features
+efficiently and robustly.
+
+别人工作的拓展
+
+Our work can be viewed as an extension of PointNet....
