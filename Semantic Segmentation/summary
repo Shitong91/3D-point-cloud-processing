@@ -1,0 +1,115 @@
+
+本文主要综述了deep learning 技术在 semantic segmentation技术上的应用
+
+The key advantage of these deep learning techniques, which gives them an edge over traditional methods, is the ability to learn appropriate featurerep resentations for the problem at hand, e.g., pixel labelling
+on a particular dataset, in an end-to-end fashion instead of using hand-crafted features that require domain expertise,effort, and often too much fine-tuning to make them work on a particular scenario.
+
+上面的这段话点出了deep learning 和传统的技术在处理数据的优势在哪里
+
+即传统的技术需要使用一定的方法提取hand-crafted features 比如说ORB，这样的缺点是不同的特征提取技术一般都针对特别的场景
+
+而deep learning 只需要end-to-end即可。
+
+1. 按数据的dimention 分类
+
+1.1 2D    
+
+一般的camera
+
+1.2 2.5D  
+
+RGBD, 比一般相机，多出了个深度信息，
+但是还是不很清晰的明白为什么是2.5D， 和3D数据的区别在哪里
+
+1.3 3D
+
+laser scanner
+
+
+2. 技术现状
+
+2.1 Deep learning in 2D
+
+Throughout the years, semantic segmentation has been
+mostly focused on two-dimensional images.
+
+技术很成熟，也达到了很高的精度
+
+2.2 2.5D
+
+The use of depth images with approaches focused on photometric data is not straightforward. Depth data needs to be encoded with three channels at each pixel as if it was an RGB images.
+
+暂且有个认识，对RGBD数据处理时，depth 信息的编码
+
+2.3 3D
+
+由于3D point cloud 的无序性和无结构性，不能直接使用已经在2D image中
+已经很成熟的deep learning architecture
+
+方法
+1) 3D voxel grids
+
+paper: Point cloud labeling using 3d convolutional neural network
+
+take a point cloud and parse it through a dense voxel grid, generating a set of occupancy voxels which are used as input to a 3D CNN to produce one label per voxel. They then map back the labels to the point cloud. 
+
+2) directly consume unstructured 3D point sets or meshes
+
+
+3. 主要的数据集为3D semantic segmentation
+
+3.1 2D
+
+这里暂且不研究
+
+3.2 3D
+
+1) ShapeNet Part
+
+It contains 31; 693 meshes sampled
+from 16 categories of the original dataset
+
+https://cs.stanford.edu/~ericyi/project_page/part_annotation/
+
+2) Sydney Urban Objects Dataset 
+
+this dataset contains a variety of common urban road objects
+scanned with a Velodyne HDK-64E LIDAR.
+
+There are 631 individual scans (point clouds) of objects across
+classes of vehicles, pedestrians, signs and trees
+
+http://www.acfr.usyd.edu.au/papers/SydneyUrbanObjectsDataset.shtml
+
+3) Large-Scale Point Cloud Classification Benchmark
+
+http://www.semantic3d.net/
+
+4)KITTI
+
+看文章 Sensor fusion for semantic segmentation of urban scenes
+
+4. 一些新的概念
+
+4.1 Instance Segmentation
+
+实例分割，我的理解是比如说对一个飞机的不同部件来分割
+
+5. 当前3D数据semtatic segmentation的研究问题
+
+5.1 训练需要large-scale的数据集，但是当前关于3D sematic segmantation
+的数据集还不够多
+
+5.2 deep learning 在3D方面的技术还是不够成熟
+
+dealing with 3D data such as point clouds poses an unsolved
+challenge. Due to its unordered and unstructured nature, traditional architectures such as CNNs cannot be applied unless some sort of discretization process is applied to structure it
+
+5.3 新的方法
+
+One promising line of research aims to treat point clouds as graphs and
+apply convolutions over them
+
+Deep convolutional networks on graph-structured data
+
+也就是基于graph的CNN，这里暂且有点印象
