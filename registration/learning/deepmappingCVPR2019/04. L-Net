@@ -1,0 +1,29 @@
+1. 综述
+
+The goal of the localization network, L-Net, is to estimate the sensor pose Ti in a global frame. The L-Net consists of a latent feature extraction module followed by a multi-layer perceptron (MLP) that outputs sensor pose Ti.
+
+简而言之作用就是输出每个输入点云的位姿
+
+2. 构成
+
+feature extraction---multi-layer perceptiop layer
+其中feature extraction layer依照输入数据结构的不同分为两种
+
+2.1 若输入数据为 organized point cloud
+比如 range images
+则fature extraction layer 为CNN+global pooling layer
+
+2.2 unorganized point cloud
+
+PointNet+MLP+global pooling layer
+注意这里PointNet 去掉了 input and featur transformations
+
+
+3. black box
+
+输入是一个个点云数据，输出是该点云的位姿，主要是优化theta参数
+
+当然这一层还不能优化，具体的优化loss函数在M-net的输出
+
+
+

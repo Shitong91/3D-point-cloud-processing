@@ -1,0 +1,18 @@
+摘要中总结了传统的基于visual or point cloud 求去位姿的方法
+
+step1 : hand-crafted data association
+
+  hand-crafted 即提取特征点的特征方法 data assocaition 我理解的是如何发现数据对应。比如说ICP的corrspondence，求去特征点的对应都属于 data association
+
+
+step2: sensor pose initialization
+
+个人理解为 visual or lidar odometry， 也就是局部的求去pose 比如说利用
+ICP求去 pair wise pose
+
+step3: global refinement
+
+即global relaxation
+
+
+

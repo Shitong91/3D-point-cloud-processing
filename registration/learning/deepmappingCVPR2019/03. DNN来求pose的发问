@@ -1,0 +1,12 @@
+
+Questiona:
+
+Will DNNS generalize well for geometric problems especially for registration and mapping?
+
+也就是说我们把用来解决semantic task问题的 DNN frame(依靠经验) 引进诸如 registration and mapping的geometric 问题是否合适呢？
+
+Semantic tasks can benefit from DNNs because those related problems are defined empirically and thus modeled and solved statistically. However many geometric problems are defined theoretically, and thus experiential solutions may not be adequate in termsof accuracy. 
+
+解决上面问题的主要方法是增加traning data 
+
+

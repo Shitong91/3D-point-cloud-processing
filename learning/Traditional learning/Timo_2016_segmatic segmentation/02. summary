@@ -1,0 +1,19 @@
+这是一个典型的利用 traditional supervised learning 来解决分类问题的方法
+
+step1: donsample
+
+step2: extract feature on different scales
+
+step3: input feature sets in clasffire for traning
+
+Random forest
+
+step4: test
+
+
+这类方法主要能改变的地方在于
+
+1. 用什么特征
+
+2. 用什么分类器
+

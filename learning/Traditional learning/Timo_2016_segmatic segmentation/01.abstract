@@ -1,0 +1,66 @@
+本文主要针对large-scale的point cloud semantic classification问题
+
+1. 解决的问题：
+1.1 提高计算效率和内存 和解决密度不均匀问题
+1.2 point-wise semantic classification
+
+2. 主要解决的角度
+2.1 如何计算每个点的neighborhood.
+
+本文采用的方法
+通过使用voxel filter 来对原始点云进行不同尺度的downsample，通过
+设定9个voxel size来对原始点云进行滤波，得到9个被滤波后的点云,一下的特征提取操作就是针对于9个scales进行的
+
+Instead of computing (almost) exact neighborhoods for each point, we down-sample the entire point cloud to generate a multi-scale pyramid with decreasing point density, and compute a separate search structure per scale level.
+
+2.2 featur extraction
+
+2.2.1 对每个scale都创建k-d tree
+通过对每个scale 创建k-d tree，在每个尺度发现每个点的最近点
+每个scale的k成比例缩小
+关于成比例缩小，参考 Brodu and Lague, 2012
+
+2.2.2 pure geometric feature
+
+即只使用点坐标，不考虑intensity values 和color information
+
+2.2.3 主要的feature
+1) 基于covariance tensor的特征向量和特征值
+主要参考的Weinmann et al., 2013
+
+2) 在前人的基础上1)增加了四个额外的features
+
+We augment the original feature set with four additional features that help to identify crease edges and occlusion boundaries, namely the first and second order moments of the point neighborhood around the eigenvectors e1 and e2. Finally, in order to better describe vertical and/or thin objects like lamp posts, traffic signs or tree trunks, we also compute three further features from the height values 
+
+A: first order moment
+B: second order moment
+C: height values 也就是关于z 轴
+
+总结一个点总共的feature数目
+基于文中Table1
+一共分为三类
+a: 基于covariance的特征值和我特征向量的各种运算一共是 9种
+b: 关于first order and second order 一共 4种
+c: 关于height 一共3种
+
+其中 a是借鉴别人的 ， b，c是作者加的
+
+一层scale需要 9+4+3=16种，对一个领域来说,要下采样9层，故一共是9*16=144
+
+2.3 training
+
+2.3.1 dataset
+1) Paris-Rue-Cassette and Paris-Rue-Madame
+
+这个库看以后能不能用
+
+2.3.2 classfire
+
+Random forest
+Weinmann et al., 2015 参见
+
+3. code
+
+只给了 KNN和Random forest 的库，没有给其他的代码，暂时没法重复
+
+

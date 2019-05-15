@@ -1,0 +1,26 @@
+
+
+M-Net is the occupancy map network, M-Net, is a binary classification network that takes as input a location coordinate in the global space and predicts the corresponding occupancy probability for each input location
+
+1. Network achitecture
+
+The M-Net is an MLP with a D-channel input and a 1-channel output
+from a sigmoid function, shared across all points.
+
+其中D是数据的维度
+
+2. 作用
+
+We use the M-Net mφ to define the unsupervised loss function Lφ that scores the registration quality. 
+
+暂且没有深入的研究这个loss function， 当前只是感性的认识到 
+
+ The loss function can achieve smaller values if registrations are
+accurate.
+
+  The loss function will be larger due to the difficulties of the M-Net to model such noisy occupancy patterns
+
+3. 关于occupied point and unoccupied point
+
+这里说凡是位于scanner center 和 observed 点之间的点，也就是射线上的点都是unoccupied point 这里不太了解是咋回事，而且怎么采样 unoccupied point？
+
