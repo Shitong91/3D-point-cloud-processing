@@ -1,11 +1,9 @@
 
 1. 解决问题
 
-利用DNN(deep neural network) 来解决 multiple point cloud 的registration问题，不比像ICP一样需要initialization guess
+利用DNN(deep neural network) 来解决 multiple point cloud 的registration问题
 
 2. 方法概要
-
-a localization network that estimates the poses for input point clouds, and a map network that models the scene structure by estimating the occupancy status of global coordinates.
 
 step1: L-net 一个CNN or pointNet 来估计 点云的pose
 
@@ -14,38 +12,6 @@ step2: M-net 一个full connection network 来评估step1中得出的pose的性�
 step3: M-net也输出了map，类似于hectorslam输出的地图
 
 
-最大的新意： 看似是一个监督学习的训练问题，但其实是个无监督学习，因为不需要训练，更像是个优化问题。训练的过程也是求解pose的过程
+最大的新意： 看似是一个监督学习的训练问题，但其实是个无监督学习，因为不需要训练，更像是个优化问题。
 
-3. 拓展
-
-上面的方法主要针对scan之间并不一定是相邻的，也可能是不知道序列的一堆散乱的scan.
-
-故拓展到 data from mobile platform
-extended to address the problem of Lidar SLAM by imposing geometric constraints between consecutive point clouds.
-
-4. 方法来源
-文献21,把文献21的Bayesian convolutional 换成了DNN
-
-5. dataset
-
-2D 方针和3DRGBD数据
-
-6. code
-给了个链接，但是里面只有图，并没有代码
-
-7. 主要参考文献
-
-Learning to reconstruct 3D structures for occupancy mapping from depth and color information. Intl. J. of Robotics Research, 2018
-
-8.  可以读的参考文献
-
-1) Deep learning for 2D scan matching and loop closure
-
-2) 3DFeat-Net: Weakly supervised local 3D features for point cloud registration
-
-3) 3D point cloud registration for localization using a deep neural network autoencoder.
-
-4) PPFNet: Global context aware local features for robust 3D point matching
-
-5) A globally optimal solution to 3D ICP point-set registration
 
