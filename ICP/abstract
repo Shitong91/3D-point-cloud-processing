@@ -1,0 +1,9 @@
+本文的方法基本上还是传统的框架
+
+1. GICP 求相邻frame之间的motion
+2. 1中求的motion作为输入，求出key frame， 这里的key 
+   frame的方法可以注意一下
+
+3. loop closure
+
+4. graph optimaztion
