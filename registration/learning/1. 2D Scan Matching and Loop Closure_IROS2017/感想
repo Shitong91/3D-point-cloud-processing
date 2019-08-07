@@ -1,0 +1,29 @@
+这个框架看起来跟pointnet的框架很相似，都是为了解决两个问题，分成了卷积层和全连接层，不同的地方在于
+
+1. 输入不同
+
+本框架的输入： a pair of laser scan 2X1081 matrix for the scan matching
+是不是2D 点云是有顺序的？可以直接用CNN？
+Pointnet输入： 一堆无顺序的点云
+
+2. 一个假设
+
+Based on the assumption that the features needed for scan
+matching are similar to features needed for loop closure
+detection,we design a single stack of convolutional layers
+to learn the features. 
+
+这个假设是使用同一个CNN去训练两个不同目的的特征的理论前提
+
+3. 所用的CNN框架
+ResNet framework
+一个产生于16年的非常强劲的CNN，
+本文的作者得出的一个结论：
+
+The residual
+structure has superior performance in both scan matching and
+loop closure detection compared with traditional networks.
+
+
+1. 是否能利用本文的deep learning框架来改进6DSLAM中的 loop closure
+2. scan matching本文中的方法效果不好，但是是否能拓展到3D 上呢？

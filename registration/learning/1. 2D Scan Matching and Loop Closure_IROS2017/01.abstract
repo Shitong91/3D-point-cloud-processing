@@ -1,0 +1,12 @@
+1. 本文主要针对两个待解决的问题
+
+1）. 2D LIDAR range scans的relative pose transformation 问题
+
+2）. loop closure 问题
+
+2. 解决问题的方法
+
+end-to-end deep learning framework
+
+
+

@@ -1,0 +1,21 @@
+该深度学习框架分为两部分
+
+1. Convolutional layer
+
+这个层学习了scan matching and loop closure 两个的特点，也就是说这里用在一个共同的框架里。
+
+2. 1输出的结果被分别连接到两个separate fully connected layers 
+
+这两个fully connected layers 分别实现了scna matching 和loop closure的功能。
+
+2.1 fully connected layer for scan matching
+
+regression for computing the relative transformation between 
+two given scans
+
+2.2 fully connected layer for scan matching
+
+do classification and determine the presence of
+a loop closure opportunity.
+
+

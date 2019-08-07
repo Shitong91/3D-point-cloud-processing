@@ -1,0 +1,23 @@
+这篇文章提到了一个 预训练的概念
+
+
+step 1:
+Pretraining / fine-tuning works as follows:
+
+step2:
+You have machine learning model 𝑚
+step3:
+Pre-training: You have a dataset 𝐴
+on which you train 𝑚
+step4:
+You have a dataset 𝐵
+. Before you start training the model, you initialize some of the parameters of 𝑚 with the model which is trained on 𝐴
+.
+step 5:
+Fine-tuning: You train 𝑚
+on 𝐵
+
+    .
+
+This is one form of transfer learning. So you can transfer some of the knowledge obtained from dataset 𝐴
+to dataset 𝐵. See my Machine Learning Glossary for this and more terms explained in very few words.

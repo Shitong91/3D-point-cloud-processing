@@ -1,0 +1,30 @@
+1. loop closure的作用
+
+Loop closure is a major component in the back-end graph optimization in the front-end / back-end framework of SLAM.
+
+It helps to eliminate odometry errors that are accumulated in the front-end for long term operations.
+
+总结：为后端消除累积误差
+
+2. 当前关于loop closure的方法主要是corelation based approaches. 
+也就是基于相关性的方法.
+
+1)scan-to-submap
+目前没有了解
+
+2) bag-of-words
+详见高博的书
+
+3. Existing works on detecting loop closures
+
+step1: designing proper feature extraction
+step2: Nearest Neighbor search
+step3: BoW retrieval
+
+4. 本文的方法
+
+we approach the 2D LiDAR loop closure problem as a classification
+problem, to answer whether a pair of laser scans are captured
+in nearby location. 
+
+说是归结为一个分类问题，目前还是不太明白
