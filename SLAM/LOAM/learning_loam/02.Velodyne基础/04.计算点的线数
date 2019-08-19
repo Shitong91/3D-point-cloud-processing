@@ -1,0 +1,26 @@
+如果计算点所处的scan(线数)
+文章中所说的scan指的是Velodyne lidar的线数。以VLP16为例
+则一共有16个scan。
+
+问题重述：
+
+已知 一帧点云中的所有点的3D坐标，求取每个点所归属的scan，也就是每个
+点所在的线数。
+
+由Laser_ID1.png 和 Laser_ID2.png 可知，竖直方向上view of field 
+是-15 - +15 degree. 16个线的每个线所处的位置都是固定的。
+
+solution: 只需通过已知的三维点云坐标求出对应的竖直角度，然后在表中查找该角度所对应的线号即可。
+
+
+    float angle = atan(point.y / sqrt(point.x * point.x + point.z * point.z)) *
+                  180 / M_PI; // angle of origin z from origin x-y plane  //由图Laser_Coord.png 可知该行代码求取的是竖直角度。
+    int scanID;
+    
+    int roundedAngle = int(angle + (angle < 0.0 ? -0.5 : +0.5));   //求出的角度是float，该行代码起到了四设五入的作用。因为线号是整数
+    if (roundedAngle > 0) {      //这个其实是一个规律，由  Laser_ID.png可知，当竖直角度为正数时，正好对应于线数，当竖直角度为负时， +                                //roundedAngle+(N_SCANS - 1)即是线数。
+      scanID = roundedAngle;
+    } else {
+      scanID = roundedAngle + (N_SCANS - 1);   
+    }
+

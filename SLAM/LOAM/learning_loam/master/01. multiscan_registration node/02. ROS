@@ -1,0 +1,15 @@
+1. 启动节点
+
+ros::NodeHandle node;
+在利用ros时，这句话是必须的
+
+2. getParam
+
+该函数属于ros::NodeHandle类
+中的函数。
+getParam("scanPeriod", fParam)作用
+检测参数服务器中是否能检索到名字为“scanPeriod”
+的参数，如果没有函数返回值为false。 如果检测到
+该参数，则把该参数的实际数值赋值给fParam。并返回true
+
+

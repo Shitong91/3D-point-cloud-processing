@@ -1,0 +1,21 @@
+1. 代码的分类
+
+目前，论文的作者已经取消了ROS上的代码开源。但是数据集还是能在ros上下载到的。
+
+目前的代码主要来自下面的链接：
+https://github.com/laboshinl/loam_velodyne
+
+这个版本控制下面有维护了两个版本
+
+1.1 master
+这个代码写的非常有水平，但是找不到接受 topic /velodyne_points. 
+也就是类似下面的这句话：
+ ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(
+      "/velodyne_points", 2, laserCloudHandler);
+如果没有这个话题，不知道系统怎么接受LIDAR 数据。
+
+1.2 dev
+
+在该地址下找到了一个branch，发现网上解读LOAME的大部分资料都是
+基于这个版本的程序。
+个人感觉这个版本的代码写的不没有master的规整，比较随意，但是既然网上大部分的材料都基于该代码，那么就以研究这个代码为中主。

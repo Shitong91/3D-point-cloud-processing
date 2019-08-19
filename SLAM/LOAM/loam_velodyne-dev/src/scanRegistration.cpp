@@ -253,21 +253,21 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg) {
     if (systemInitCount >= systemDelay) {
       systemInited = true;
     }
-    return;
+    return;   //弃用前20帧数据
   }
 
   std::vector<int> scanStartInd(
       N_SCANS, 0); // scanStartInd[scanId] is the first point id of scanId  
   std::vector<int> scanEndInd(
       N_SCANS, 0); // scanEndInd[scanId] is the last point id of scanId
-
+//初始化各个scan（线）的初始点和终止点都是0;
   double timeScanCur =
       laserCloudMsg->header.stamp.toSec(); // time point of current scan
   pcl::PointCloud<pcl::PointXYZ>
       laserCloudIn; // input cloud, NaN points removed
-  pcl::fromROSMsg(*laserCloudMsg, laserCloudIn);
+  pcl::fromROSMsg(*laserCloudMsg, laserCloudIn);  //消息转换成pcl数据存放
   std::vector<int> indices;
-  pcl::removeNaNFromPointCloud(laserCloudIn, laserCloudIn, indices);
+  pcl::removeNaNFromPointCloud(laserCloudIn, laserCloudIn, indices);  //移除空点
 
   //ROS_INFO("cloud recieved");
   if (false) {
@@ -317,9 +317,9 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg) {
   /// use imu data to register original scanned points into lidar coodinates in
   /// different scan lines
   for (int i = 0; i < cloudSize; i++) {
-    point.x = laserCloudIn.points[i].y;
-    point.y = laserCloudIn.points[i].z;
-    point.z = laserCloudIn.points[i].x;
+    point.x = laserCloudIn.points[i].y;  //坐标系转换，原来的 x forward  转化后 xleft
+    point.y = laserCloudIn.points[i].z;                  // y left  y up
+    point.z = laserCloudIn.points[i].x;                  // z up    z forward
 
     // minP.x = std::min(minP.x, point.x);
     // minP.y = std::min(minP.y, point.y);
@@ -339,7 +339,7 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg) {
 
     // compute scanID
 #ifndef VELODYNE_HDL64E
-    int roundedAngle = int(angle + (angle < 0.0 ? -0.5 : +0.5));
+    int roundedAngle = int(angle + (angle < 0.0 ? -0.5 : +0.5));  //起到四舍五入的作用
     if (roundedAngle > 0) {
       scanID = roundedAngle;
     } else {
@@ -360,7 +360,7 @@ void laserCloudHandler(const sensor_msgs::PointCloud2ConstPtr &laserCloudMsg) {
       continue;
     }
 
-    const int debug_errorPointIDStart = 121513;
+    //const int debug_errorPointIDStart = 121513;
     // if (i >= debug_errorPointIDStart) {
     //   ROS_INFO("point %i's scanID = %i", i, scanID);
     // }    
@@ -808,7 +808,7 @@ void imuHandler(const sensor_msgs::Imu::ConstPtr &imuIn) {
 
   float accX = imuIn->linear_acceleration.y - sin(roll) * cos(pitch) * 9.81;
   float accY = imuIn->linear_acceleration.z - cos(roll) * cos(pitch) * 9.81;
-  float accZ = imuIn->linear_acceleration.x + sin(pitch) * 9.81;
+  float accZ = imuIn->linear_acceleration.x + sin(pitch) * 9.81;//把重力分量分到三轴上
 
   //#define PRINT(name) ROS_INFO(#name" = %f\n", name)
   //  PRINT(accX);
@@ -834,7 +834,7 @@ int main(int argc, char **argv) {
   ros::NodeHandle nh;
 
   ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(
-      "/velodyne_points", 2, laserCloudHandler);
+      "/velodyne_points", 2, laserCloudHandler);  //接收LIDAR数据，数据每来一次，就跳入laserCloudHandler中。
 
   ros::Subscriber subImu =
       nh.subscribe<sensor_msgs::Imu>("/imu/data", 50, imuHandler);

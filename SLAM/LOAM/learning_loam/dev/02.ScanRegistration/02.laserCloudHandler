@@ -1,0 +1,40 @@
+一旦接收到laser 数据，就调用该函数。该函数主要完成了 对输入的一帧
+点云的重新排列和特征点的提取工作。
+
+下面针对代码进行细致解读
+1.
+if (!systemInited) {
+    systemInitCount++;
+    if (systemInitCount >= systemDelay) {
+      systemInited = true;
+    }
+    return;
+  }
+
+初始化时systemInited为false，该段代码的作用是，弃用前20帧数据
+
+2.
+ std::vector<int> scanStartInd(
+      N_SCANS, 0);
+ std::vector<int> scanEndInd(
+      N_SCANS, 0);
+定义了一个int类型的vector 变量 scanStartInd和scanEndInd. 其实类似于一个一维数组。如果N_SCAN=16，则这句代码的意思是scanStartInd[0...16]=0
+初始化每个线的初始点位置是0，每个线的终止位置也是0。
+
+3. atan2 and atan
+
+对于任意不同时等于0的实参数x和y，atan2(y,x)所表达的意思是坐标原点为起点，指向(y,x)的射线在坐标平面上与x轴正方向之间的角的角度度。当y>0时，射线与x轴正方向的所得的角的角度指的是x轴正方向绕逆时针方向到达射线旋转的角的角度；而当y<0时，射线与x轴正方向所得的角的角度指的是x轴正方向绕顺时针方向达到射线旋转的角的角度。
+ atan 和 atan2 区别：
+
+1）：参数的填写方式不同；
+atan（y/x）表示求的是x的反正切，其返回值为[-pi/2,+pi/2]之间的一个数。
+atan2（y，x）求的是y/x的反正切，其返回值为[-pi,+pi]之间的一个数。
+2）：atan2 的优点在于 如果 x2-x1等于0 依然可以计算，但是atan函数就会导致程序出错；
+
+float startOri =-atan2(laserCloudIn.points[0].y,
+             laserCloudIn.points[0].x);
+
+由atan2的定义可知，算出的角度是按照逆时针定义的，而LIDARE的旋转是按照
+顺时针旋转的，所以这里计算出的角度前面加了个负号。
+
+4. 求去点云中每个点所属的scan(线）

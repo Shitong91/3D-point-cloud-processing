@@ -1,0 +1,36 @@
+ScanRegistration.cpp
+
+该文件也是一个独立的ros node。 主要完成了对输入点云的
+整理和特征点的提取。
+
+1. 基于velodyne 激光扫描模型对输入点云进行整理
+
+2. 对整理好的point cloud进行特征提取。
+
+下面总结main函数主要完成的功能
+
+2.1 接收 topic 名字为 /velodyne_points 的laser 数据。
+
+ros::Subscriber subLaserCloud = nh.subscribe<sensor_msgs::PointCloud2>(
+      "/velodyne_points", 2, laserCloudHandler);
+
+一旦接收到 话题为/velodyne_points的雷达数据，就调用 laserCloudHandler函数
+
+laserCloudHandler函数主要完成了point cloud的整理和特征点的提取。
+
+2.2 发布前面已经获取的特征点和转化后的imu信息。
+
+这里发布的信息主要有六种。
+
+1) 依照lidar 线整理后的lidar point cloud
+
+2）/laser_cloud_sharp 和 /laser_cloud_flat
+曲率比较大的存在这两个点云中，也就是论文中说的 
+Each subregion can provide maximally 2 edge points and 4 planar points
+3）/laser_cloud_less_sharp 和 /laser_cloud_less_flat
+选取更多的点，
+也就是不仅仅每个区域两个2 edge points and 4 planar points而是
+更多的feature 点。
+4）/imu_trans 处理过得imu信息
+这里暂时没有研究该代码中的imu信息，以后仔仔补充。
+
