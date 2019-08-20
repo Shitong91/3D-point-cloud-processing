@@ -1,0 +1,54 @@
+所谓 Lightweight
+该代码可以实时运行，并且在low-power embedded system就可以运行
+
+所谓 Ground-Optimized
+利用了ground point 进行了feature points extraction 和 optimization
+
+主要思路
+
+1. Point cloud projection
+
+即把raw point cloud projected onto a range image
+
+2. ground point extraction
+
+3. range image segmentation
+
+通过step1,把original point cloud 转化为range image，然后
+step2 对 range image进行 ground point extraction。提取ground 
+point 以后，把range image 中剩余的点进行分割。这一步过后，一个
+range image就被分成了 ground part and several clusters
+
+3.Feature extraction
+
+方法和LOAM基本上一样，区别在于：
+
+针对 planar feature 只在ground part进行提取
+针对 edge feature 只在segmented clusters 进行提取
+
+而且在提取edge feature时，只在相邻scan的相同cluster中进行。
+
+4. Lidar odometry
+
+5. mapping
+
+6. transformation fusion
+
+
+
+大致框架和LOAM是一样的，不一样的地方有两个地方
+
+1)feature extraction
+
+LOAM: 对raw point cloud 进行特征提取
+LeGO: 对segment range image进行分割
+
+2)LM
+在求取transformation 时，LOAM 一步
+LeGO: 分为两步
+
+Planar feature 只用来估计 tz，roll pitch
+edge feature 只用来估计tx，ty，yaw
+
+
+
