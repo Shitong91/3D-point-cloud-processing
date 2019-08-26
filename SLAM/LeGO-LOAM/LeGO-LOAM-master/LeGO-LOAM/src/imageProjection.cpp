@@ -208,7 +208,7 @@ public:
             thisPoint.z = laserCloudIn->points[i].z;
             // find the row and column index in the iamge for this point
             verticalAngle = atan2(thisPoint.z, sqrt(thisPoint.x * thisPoint.x + thisPoint.y * thisPoint.y)) * 180 / M_PI;
-            rowIdn = (verticalAngle + ang_bottom) / ang_res_y;
+            rowIdn = (verticalAngle + ang_bottom) / ang_res_y;   //从下往上计数，-15度记为初始线，第0线，一共16线(N_SCAN=16)。
             if (rowIdn < 0 || rowIdn >= N_SCAN)
                 continue;
 
@@ -253,7 +253,7 @@ public:
                 if (fullCloud->points[lowerInd].intensity == -1 ||
                     fullCloud->points[upperInd].intensity == -1){
                     // no info to check, invalid points
-                    groundMat.at<int8_t>(i,j) = -1;
+                    groundMat.at<int8_t>(i,j) = -1;    //初始化时候都是-1，所以如果在读取数据以后还是-1就被认为是无效的点
                     continue;
                 }
                     
@@ -275,7 +275,7 @@ public:
         for (size_t i = 0; i < N_SCAN; ++i){
             for (size_t j = 0; j < Horizon_SCAN; ++j){
                 if (groundMat.at<int8_t>(i,j) == 1 || rangeMat.at<float>(i,j) == FLT_MAX){
-                    labelMat.at<int>(i,j) = -1;
+                    labelMat.at<int>(i,j) = -1;     //凡是labelMat=-1或者groundMat=1的就是ground point
                 }
             }
         }
@@ -294,7 +294,7 @@ public:
         for (size_t i = 0; i < N_SCAN; ++i)
             for (size_t j = 0; j < Horizon_SCAN; ++j)
                 if (labelMat.at<int>(i,j) == 0)
-                    labelComponents(i, j);
+                    labelComponents(i, j);  //点云分类
 
         int sizeOfSegCloud = 0;
         // extract segmented cloud for lidar odometry
