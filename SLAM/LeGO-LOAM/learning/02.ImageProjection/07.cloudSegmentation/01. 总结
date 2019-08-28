@@ -1,0 +1,24 @@
+该cloudSegmentation 函数主要实现了两个功能：
+
+1. labelComponents()
+
+对除去地面点之外的点进行了分割，主要使用的是聚类的方法
+
+2. 剩余部分
+
+2.1 储存了一部分坏点，这些点不是ground point，也不是被分割
+的点。
+   if (i > groundScanInd && j % 5 == 0){
+                            outlierCloud->push_back(fullCloud->points[j + i*Horizon_SCAN]);
+
+
+2.2 大部分的ground point 被舍弃掉，只留下一部分
+
+if (groundMat.at<int8_t>(i,j) == 1){
+                        if (j%5!=0 && j>5 && j<Horizon_SCAN-5)
+                            continue;
+                    }
+
+2.3 对去掉坏点和一大部分ground points以后的point cloud重新保存
+
+保存在segmentedCLoud，这些点里包括segmented point 和少部分ground point

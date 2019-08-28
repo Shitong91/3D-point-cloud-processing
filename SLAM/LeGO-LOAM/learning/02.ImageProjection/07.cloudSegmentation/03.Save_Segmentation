@@ -1,0 +1,37 @@
+正如总结中所说，在分割完成以后，对点云有进行了重新的归整，主要包括
+
+1. 把一部分分割时候剔除的点部分的保存在outlierCloud中，只保存部分是为了将来可视化观察用的，没有其他的作用，这些被剔除的点的特征
+
+1) 非地面点
+
+2) 分割时，聚类点少于30个点
+
+if (labelMat.at<int>(i,j) == 999999){
+                        if (i > groundScanInd && j % 5 == 0){
+                            outlierCloud->push_back(fullCloud->points[j + i*Horizon_SCAN]);
+                            continue;
+                        }else{
+                            continue;
+                        }
+                    }
+
+
+2. 只保存部分的ground point 并且是少部分
+
+if (groundMat.at<int8_t>(i,j) == 1){
+                        if (j%5!=0 && j>5 && j<Horizon_SCAN-5)
+                            continue;
+                    }
+
+
+对于地面点，每行只保存了
+0,1,2,3,4,5,10,15.....1795,1796,1797.1798,1799 这些点
+
+特点是每一行的前五个点和最后五个点再加上满足被5整除的中间点。当然这里是假设一行的所有点都是ground points，实际上一行中
+有些点不是ground points. 所以最终保存的地面点肯定比这个少。
+
+3. 为每行确立起始点和结束点
+
+这一点和LOAM算法中的部分是一致的。应该是为后续求曲率时候做准备，求曲率以行为单位求每个点的领域点。
+
+

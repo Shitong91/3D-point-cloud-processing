@@ -1,0 +1,9 @@
+1. 初始化
+labelMat()=0;
+
+2. 地面点
+labelMat()=-1;
+
+3. segmented point
+labelMat()>0;
+

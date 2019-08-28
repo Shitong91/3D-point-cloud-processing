@@ -1,0 +1,20 @@
+如果使用ROS的消息订阅机制
+一般的格式就是
+
+main函数
+
+int main(int argc, char **argv)
+{
+    ros::init(argc, argv, "listener");
+    ros::NodeHandle n;
+    ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+ 
+    /**
+     * ros::spin() 将会进入循环， 一直调用回调函数chatterCallback(),每次调用1000个数据。
+     * 当用户输入Ctrl+C或者ROS主进程关闭时退出，
+     */
+    ros::spin();
+    return 0;
+}
+
+ros::spin()类似一个循环，不停的调用消息订阅函数
