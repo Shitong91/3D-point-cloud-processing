@@ -1,0 +1,11 @@
+1. random variable 随机变量       Probabilistic Robotics P16
+
+2. PDF probability density function
+
+3. Normal distribution 又叫高斯分布
+
+ 该分布主要利用 mean and covariance matrix 来表征
+
+4. conditional probability，Theorem of total probablity
+
+5. Bayes rules
