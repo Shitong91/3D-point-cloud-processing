@@ -1,0 +1,161 @@
+%\documentclass[UTF8,a4paper,10pt, twocolumn]{ctexart}
+\documentclass[UTF8,a4paper,10pt]{ctexart}
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]
+{geometry}
+
+% -- text font --
+% compile using Xelatex
+
+%\setmainfont{Microsoft YaHei}  % 微软雅黑
+%\setmainfont{YouYuan}  % 幼圆    
+%\setmainfont{NSimSun}  % 新宋体
+%\setmainfont{KaiTi}    % 楷体
+%\setmainfont{SimSun}   % 宋体
+%\setmainfont{SimHei}   % 黑体
+
+\usepackage{times}
+%\usepackage{mathpazo}
+%\usepackage{fourier}
+%\usepackage{charter}
+%\usepackage{helvet}
+
+\usepackage{amsmath, amsfonts, amssymb} % math equations, symbols
+\usepackage[english]{babel}
+\usepackage{color}      % color content
+\usepackage{graphicx}   % import figures
+\usepackage{url}        % hyperlinks
+\usepackage{bm}         % bold type for equations
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+   
+%\floatname{algorithm}{算法} 
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}}     % use Input in the format of Algorithm  
+%\renewcommand{\algorithmicensure}{ \textbf{Initialize:}} % use Initialize in the format of Algorithm  
+\renewcommand{\algorithmicensure}{ \textbf{Output:}}     % use Output in the format of Algorithm  
+
+\usepackage{fancyhdr}   % 设置页眉、页脚
+%\pagestyle{fancy}
+\lhead{}
+\chead{}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+%\usepackage{draftwatermark}         % 所有页加水印
+%\usepackage[firstpage]{draftwatermark} % 只有第一页加水印
+%\SetWatermarkText{Water-Mark}           % 设置水印内容
+ 
+%\SetWatermarkLightness{0.9}             % 设置水印透明度 0-1
+%\SetWatermarkScale{1}                   % 设置水印大小 0-1    
+
+\usepackage{hyperref}   % bookmarks
+\hypersetup{colorlinks, bookmarks, unicode} % unicode
+
+
+\title{一个EKFSLAM的仿真例子}
+\author{ Shitong Du 
+  \thanks{dushitong@hrbeu.edu.cn} 
+}
+
+
+\date{\today}
+
+\begin{document}
+    \maketitle
+    %\thispagestyle{fancy}
+\begin{abstract}
+这是一个关于EKFSLAM的例子。一直以来对经典的filter-based on framework 
+不太明白，正好借用这个例子来对EKFSLAM进行深入的了解。在网上找了一个
+EKFSLAM的仿真例子，该例子通过仿真小车的运动状态，对真实的运动轨迹增加
+噪声来模拟小车的运动方程所获得的姿态。通过对 landmark点增加噪声来模拟
+传感器获取的量测数据。
+\end{abstract}
+\section{Kalman Filter} 
+\label{sec:one}
+Kalman filter 属于贝页斯滤波(Bayes filters)的一种，它的适用条件是线性
+高斯系统(Linear Gaussian systems).所谓的高斯系统指的是服从正态分布的
+系统。经典的卡尔曼滤波框架由状态方程和量测方程组成，具体公式如下：
+
+\begin{align}
+x_t &= A_tx_{t-1}+B_tu_t+\varepsilon_t\\
+z_t &= C_tx_t+\delta_t
+\label{transition}
+\end{align}
+Here $x_t$ and $x_{t-1}$ are state vectors, and $u_t$ is the control vector 
+at time $t$. $A_t$ is a square matrix of size $n \times n$, where $n$ is the 
+dimension of the state vector $x_t$. $B_t$ is of size $n \times m$, with $m$ 
+being the dimension of the control vector $u_t$. The random variable $\varepsilon_t$ 
+in \eqref{transition} is a Gaussian random vector that models the uncertainty 
+introduced by the state transition. 
+
+$C_t$ is a matrix of size $K \times n$, where $k$ is the dimension of the 
+measurement vector $z_t$. The vector $\delta_t$ describles the measurenment 
+noise. The distribution of $\delta_t$ is a multivariate Gaussian with zero 
+mean and covariance $	Q_t$.
+\begin{algorithm}
+    \caption{ Kalman filter algorithm }
+    \label{alg:KF}
+   \begin{algorithmic}[1]
+       \Require $\hat{x_{t-1|t-1}}$, $\Sigma_{t-1}$, $u_t$, $z_t$
+       \Ensure $\mu_t$, $\Sigma_t$
+       \Function {Algorithm Kalman filter}{$\mu_{t-1}$, $\Sigma_{t-1}$,$u_t$, $z_t$}
+       \State $\bar{\mu}_t=A_t\mu_{t-1}+B_tu_{t}$
+       \State $\bar{\Sigma}_{t}=A_t\Sigma_{t-1}A_t^T+R_t$
+       \State $K_t=\bar{\Sigma}_tC_t^T(C_t\bar{\Sigma}_tC_t^T+Q_t)^{-1}$
+       \State $\mu_t=\bar{\mu}_t+K_t(z_t-C_t\bar{\mu}_t)$
+       \State $\Sigma_t=(I-K_tC_t)\bar{\Sigma}_t$
+       \State \Return{$\mu_t$,$\Sigma_t$} 
+       \EndFunction
+   \end{algorithmic}
+\end{algorithm}
+
+卡尔曼滤波的算法基本公式被呈现在Algorithm~\ref{alg:KF}中. 具体的推导目前暂且不用关注，
+现在需要知道的是KF框架的输入，输出和如何使用KF。在使用Kalman 过程中，主要使用mean $\mu_t$ 
+和 the covariance $\Sigma_t$来表征系统当前$t$ 时刻的状态。公式2和3被称做{\bfseries 状态预测}
+(state prediction )。该过程会根据上一时刻估计到的状态（$\mu_{t-1}$)和运动模型($u_{t}$)来估计
+当前时刻的状态$(\bar{\mu}_t)$. $\bar{\Sigma}_t$ 是用来对状态估计准确度的一种测量。它表征了我们
+仅仅通过过程控制方程(Eq.~\eqref{transition})来预测当前时刻状态的准确度。
+公式4到6为{\bfseries 状态更新}(state updation). $K_t$ 是{\bfseries 卡尔曼增益}(Kalman gain)。
+{\bfseries 卡尔曼增益的作用，就是分配模型预测的状态和传感器测量的状态之间的权重}. 
+在计算完卡尔曼增益后，就可以通过该增益对状态进行进一步的更新，之所以称为进一步更新针对的是
+状态预测阶段而言。在式5中，$z_t$是当前时刻的量测值，$C_t$ 起到了连接观测量和状态之间的关系。
+这两个量在不同的应用场景下有不同的意义。如在激光雷达中，$z_t$可以表示激光雷达数据直接得到的
+数据(range and angle)。此时$C_t$就是当前状态和range和angle之间的关系；如果是在视觉场景中，
+$z_t$可以表示提取的特许点的像素点坐标，则$C_t$表示状态和对应像素点坐标之间的关系。
+关于卡尔曼滤波的形象解释可以参照博客\footnote{\url{https://www.jianshu.com/p/9214a94b26ca}}。
+卡尔曼滤波算法部分的内容主要来自 书籍Probabilistic Robotics 的3.2 章节。当前的要求是不用明白
+如何推导的，只要知道卡尔曼滤波的输入输出和五个公式即可。
+
+\section{The Extended Kalman Filter}
+经典的卡尔曼滤波是基于线性高斯假设的条件下的，{\bfseries 也就是说过程和量测方程函数都是状态的
+线性函数(linear function)}。要明白之所以要有线性假设是因为高斯模型在经过线性变换以后依然是高斯过程。
+所以线性假设最终还是为了服务于高斯假设。这里没有深究为什么一定要是高斯过程，肯定是在推导五个公式的
+过程用到了高斯假设。{\bfseries 经典的卡尔曼滤波基于系统的线性假设是不符合现实条件的，因为现实生活中
+大部分的实例都是非线性系统，这样自然就引出了卡尔曼滤波的改进版本。扩展卡尔曼滤波是卡尔曼滤波的进阶版，
+差别不大，但可以应用于非线性系统。} EKF的关键思想在于{\bfseries 线性化}(linearization). 因为过程方程和量测方程都是状态的非线性函数，所以Eq.~\eqref{transition}的表示方法不能在使用，故我们重新定义这两个方程。
+\begin{align}
+& x_t = g(u_t,x_{t-1})+\varepsilon_t\\
+& z_t = h(x_t)+\delta_t
+\end{align}
+以上两个方程是非线性的，为了能继续利用经典的卡尔曼滤波算法。扩展卡尔曼滤波对非线性函数$g(.)$ 和 $h(.)$进行一阶{\bfseries 泰勒展开}(Taylor Expansion)
+
+\begin{align}
+&G_t=\frac{\partial{g}}{\partial{x}}|_{\hat{x}_{t-1|t-1},u_t}\\
+&H_t=\frac{\partial{h}}{\partial{x}}|_{\hat{x}_{t|t-1}}
+\end{align}
+泰勒展开后，把一阶泰勒展开替换经典卡尔曼滤波的对应部分即可得到下面的EKF的五个公式。
+\begin{align}
+& \hat{x}_{t|t-1}=g(u_t,x_{t-1})\\
+& \hat{\Sigma}_{t|t-1}=G_t\Sigma_{t-1}G_t^T+R_t\\
+& K_t=\hat{\Sigma}_{t|t-1}H_t^T(H_t\hat{\Sigma}_{t|t-1}H_t^T+Q_t)^{-1}\\
+& \hat{x}_{t|t}=\hat{x}_{t|t-1}+K_t(z_t-h(\hat x_{t|{t-1}}))\\
+& \hat{\Sigma}_{t|t}=(I-K_tH_t)\hat{\Sigma}_{t|t-1}
+\end{align}
+
+
+\end{document}
