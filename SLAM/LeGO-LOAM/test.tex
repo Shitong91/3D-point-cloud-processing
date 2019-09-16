@@ -1,0 +1,96 @@
+%\documentclass[UTF8,a4paper,10pt, twocolumn]{ctexart}
+\documentclass[UTF8,a4paper,10pt]{ctexart}
+\usepackage[left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]
+{geometry}
+
+% -- text font --
+% compile using Xelatex
+
+%\setmainfont{Microsoft YaHei}  % 微软雅黑
+%\setmainfont{YouYuan}  % 幼圆    
+%\setmainfont{NSimSun}  % 新宋体
+%\setmainfont{KaiTi}    % 楷体
+%\setmainfont{SimSun}   % 宋体
+%\setmainfont{SimHei}   % 黑体
+
+\usepackage{times}
+%\usepackage{mathpazo}
+%\usepackage{fourier}
+%\usepackage{charter}
+%\usepackage{helvet}
+
+\usepackage{amsmath, amsfonts, amssymb} % math equations, symbols
+\usepackage[english]{babel}
+\usepackage{color}      % color content
+\usepackage{graphicx}   % import figures
+\usepackage{url}        % hyperlinks
+\usepackage{bm}         % bold type for equations
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+   
+%\floatname{algorithm}{算法} 
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}}     % use Input in the format of Algorithm  
+%\renewcommand{\algorithmicensure}{ \textbf{Initialize:}} % use Initialize in the format of Algorithm  
+\renewcommand{\algorithmicensure}{ \textbf{Output:}}     % use Output in the format of Algorithm  
+
+\usepackage{fancyhdr}   % 设置页眉、页脚
+%\pagestyle{fancy}
+\lhead{}
+\chead{}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+%\usepackage{draftwatermark}         % 所有页加水印
+%\usepackage[firstpage]{draftwatermark} % 只有第一页加水印
+%\SetWatermarkText{Water-Mark}           % 设置水印内容
+ 
+%\SetWatermarkLightness{0.9}             % 设置水印透明度 0-1
+%\SetWatermarkScale{1}                   % 设置水印大小 0-1    
+
+\DeclareMathOperator{\atantwo}{atan2}
+\usepackage{hyperref}   % bookmarks
+\hypersetup{colorlinks, bookmarks, unicode} % unicode
+
+
+\title{一个EKFSLAM的仿真例子}
+\author{ Shitong Du 
+  \thanks{dushitong@hrbeu.edu.cn} 
+}
+
+
+\date{\today}
+
+\begin{document}
+    \maketitle
+    %\thispagestyle{fancy}
+\begin{abstract}
+
+\end{abstract}
+\section{Kalman Filter} 
+\label{sec:one}
+
+
+
+\section{The Extended Kalman Filter}
+
+
+\section{EKFSLAM}
+\subsection{EKFSLAM模型构建}
+\label{moxing}
+
+\subsection{EKFSLAM 参数求解}
+
+
+\section{数据关联}
+
+
+\section{总结}
+
+
+\end{document}

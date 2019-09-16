@@ -156,6 +156,7 @@ $h(.)$进行一阶{\bfseries 泰勒展开}(Taylor Expansion)
 泰勒展开后，把一阶泰勒展开替换经典卡尔曼滤波的对应部分即可得到下面的EKF的五个公式。
 \begin{align}
 & \hat{x}_{t|t-1}=g(u_t,x_{t-1})\\
+\label{ekf}
 & \hat{\Sigma}_{t|t-1}=G_t\Sigma_{t-1}G_t^T+R_t\\
 & K_t=\hat{\Sigma}_{t|t-1}H_t^T(H_t\hat{\Sigma}_{t|t-1}H_t^T+Q_t)^{-1}\\
 & \hat{x}_{t|t}=\hat{x}_{t|t-1}+K_t(z_t-h(\hat x_{t|{t-1}}))\\
@@ -246,5 +247,69 @@ Section.~\ref{moxing}已经给出了系统的运动和量测方程，接下来�
 \right)}_{\Sigma}
 \end{align}
 
+其中$m*$是当前状态下的路标点。接下来就是计算$G_t$ 和$H_t$. 这里有一个问题需要注意的是，{\bfseries 在计算$G_t$的时候，
+不仅对状态求了一阶导数，对输入状态量$Vn$ 和 $G_n$也进行了求导，分别得到$G_t^v$和$G_t^u$。个人不明白为什么要这么做。}
+这里暂且存疑且只给出最终的计算结果。中间过程可参照参照博客\footnote{\url{https://blog.csdn.net/qq_36355662/article/details/84836293}}. 
+因为过程方程是由小车运动状态得到的，而在移动过程中状态量中只有位姿信息发生了变化。所以$G_t^v$和$G_t^u$是分块矩阵。由以上叙述可知，
+Eq.~\eqref{ekf}可以进一步化为：
+\begin{align}
+	\hat{\Sigma}_{t|t-1}&=G_t^v\Sigma_{t-1}(G_t^v)^T+G_t^uR_t(G_t^u)^T\\
+	&=\left(
+	\begin{array}{cc}
+	G_t^x& 0\\
+	0&     I
+	\end{array}
+	\right)\left(
+	\begin{array}{cc}
+	\Sigma_{xx}& \Sigma_{xm}\\
+	\Sigma_{mx}& \Sigma_{mm}
+	\end{array}
+	\right)\left(
+	\begin{array}{cc}
+	(G_t^x)^T& 0\\
+	0& I
+	\end{array}
+	\right)+G_t^uR_t(G_t^u)^T\\
+	&=\left(
+	\begin{array}{cc}
+	G_t^x\Sigma_{xx}(G_t^x)^T& G_t^x\Sigma_{xm}\\
+	(G_t^x\Sigma_{xm})^T& \Sigma_{mm}
+	\end{array}
+	\right)+G_t^uR_t(G_t^u)^T
+\end{align}
+在获得$G_t$以后，还需要求取$H_t$。$H_t$ 是一个$k \times n$的矩阵。$k$是量测点的数量$*$路标点维数，$n$是状态向量此刻的树目。
+Eq.~\eqref{measure}对状态向量$x$求导可得：
+\begin{align}
+H_t^i&=\frac{\partial{h}}{\partial{x}}\\
+	&=\frac{1}{q}\left(
+	\begin{array}{ccccc}
+		-\sqrt{q}\delta_x& -\sqrt{q}\delta_y& 0& +\sqrt{q}\delta_x& \sqrt{q}\delta_y\\
+		\delta_y& -\delta_x& -q& \delta_y& \delta_x
+	\end{array}
+	\right)
+\end{align}
+
+注意上式只是针对一个landmark的情况，也就是量测点只有一个。所以是$H_t^i$。
+$H_t^i$是一个$2 \times n$的矩阵，2行是因为一个路标是2D的。$H_t$是$k\times n$矩阵，$k$是landmakrs的数量$*2$。
+
+上面的所有步骤都是按照EKF的5个公式的顺序来叙述的，在求得$G_t$和$H_t$后，可以进一步求得卡尔曼增益从而进行状态更新。
+具体细节可以看程序，这里需要注意的一点是数据关联问题。关于这个问题，会在下一节进行细致描述。
+
+\section{数据关联}
+
+数据关联(data association)技术来源于多目标跟踪环境和传感器的观测过程之间的不确定性。这是因为在目标跟踪过程中，同一个目标可以在名
+个传感器上产生多个观测值，这些观测值不完全相似，主要是由杂波和传感器的系统误差导致，数据关联的目的就是要判定这些
+不完全相似的观测值是否来源于同一目标。
+
+在EKFSLAM问题中，所谓的数据关联问题就是识别当前的路标是否是之前遇见过的，若是则说明是已知路标，若不是则是新路标。之所以要有这种区分，
+是为了在状态更新时分情况处理。这里分为两种状况：
+1) 观测到已知路标时，需要对已有的所有的状态变量和协方差进行更新；即使用卡尔曼滤波框架。
+2) 观测到未知路标时，需要将新路标的信息添加到状态变量中，同时更新协方差（换句话说，就是需要对状态变量和协方差进行扩充); 只进行状态
+更新，不进行更新。
+
+\section{总结}
+基于卡尔曼滤波框架下的SLAM问题，需要知道载体的运动模型和量测模型；在状态更新时，不仅要更新位姿信息，landmark点也要同时更新。但是这
+其中涉及到一个数据关联问题，即区分当前看到的landmarke点是已经存在在状态向量中还是新的点。这两种不同的范畴决定了算法下一步的操作。
+所谓的localization指的是状态向量中的位姿部分；所谓的Mapping 指的是状态向量中的landmarks部分。
 
 \end{document}
